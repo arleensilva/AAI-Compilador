@@ -44,7 +44,8 @@ export default (code) => {
 
                 case 1:
                     if(x == '/') state = 2
-                    if(x == '*') state = 3
+                    else if(x == '*') state = 3
+                    else state = -1
                 break;
 
                 case 2:
@@ -124,11 +125,91 @@ export default (code) => {
                 break;
 
                 case 14:
-                    if(x == ';') state = 0
+                    if(isLetter(x)) state = 14
+                    else if(isNumber(x)) state = 14
+                    else if(isSpace(x)) state = 17
+                    else if(isOp(x)) state = 18
+                    else if(x == '/') state = 23
+                    else if(x == ';') state = 0
+                    else state = -1
                 break;
 
                 case 15:
-                    if(x == ';') state = 0
+                    if(isNumber(x)) state = 15
+                    else if(x == '.') state = 16
+                    else if(isSpace(x)) state = 17
+                    else if(isOp(x)) state = 18
+                    else if(x == '/') state = 23
+                    else if(x == ';') state = 0
+                    else state = -1
+                break;
+
+                case 16:
+                    if(isNumber(x)) state = 16
+                    else if(isSpace(x)) state = 17
+                    else if(isOp(x)) state = 18
+                    else if(x == '/') state = 23
+                    else if(x == ';') state  = 0
+                    else state = -1
+                break;
+
+                case 17:
+                    if(isSpace(x)) state = 17
+                    else if(isOp(x)) state = 18
+                    else if(x == '/') state = 23
+                    else if(x == ';') state = 0
+                    else state = -1
+                break;
+
+                case 18:
+                    if(isLetter(x)) state = 14
+                    else if(isNumber(x)) state = 15
+                    else if(isSpace(x)) state = 19
+                    else if (x == '/') state = 20
+                    else state = -1
+                break;
+
+                case 19:
+                    if(isLetter(x)) state = 14
+                    else if(isNumber(x)) state = 15
+                    else if(isSpace(x)) state = 19
+                    else if (x == '/') state = 20
+                    else state = -1
+                break;
+
+                case 20:
+                    if (x == '*') state = 21
+                    else state = -1
+                break;
+
+                case 21:
+                    if(x != '*') state = 21 //N precisa
+                    if (x == '*') state = 22
+                break;
+
+                case 22:
+                    if(x != '/' && x != '*') state = 21
+                    if(x == '*') state = 22 //N Precisa
+                    if(x == '/') state = 19
+                break;
+
+                case 23:
+                    if(isLetter(x)) state = 14
+                    else if(isNumber(x)) state = 15
+                    else if(isSpace(x)) state = 19
+                    else if(x == '*') state = 24
+                    else state = -1
+                break;
+
+                case 24:
+                    if(x != '*') state = 24 //N precisa
+                    if (x == '*') state = 25
+                break;
+
+                case 25:
+                    if(x != '/' && x != '*') state = 24
+                    if(x == '*') state = 25 //N Precisa
+                    if(x == '/') state = 17
                 break;
 
                 case -1:
@@ -136,7 +217,7 @@ export default (code) => {
                 break;
             }
 
-            if(state == -1) break
+            if(state == -1 || state == 2) break
         }
 
         if(state != 0 && state != 2) message = 'Erro Compilação Final'

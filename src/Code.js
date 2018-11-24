@@ -14,6 +14,7 @@ class Code extends Component {
 
     handleChange(e){
         let a = CodeParser(e.target.value)
+        if(a ==  '') a = 'Spending My Time'
         this.setState({ ...this.state, code: e.target.value, message: a })
     }
 
@@ -24,7 +25,7 @@ class Code extends Component {
                 <div className="header">
                 <h1 class="text-center text-primary">AAI - Compilador</h1>
                 <form onSubmit>
-                    <textarea onChange={(e) => this.handleChange(e)}>
+                    <textarea rows="10" cols="40" onChange={(e) => this.handleChange(e)}>
                     </textarea>
                 </form>
                 {this.state.message}

@@ -36,6 +36,6 @@
     background-color: pink;
     cursor: pointer;
   }
-  ul.theList {
+  .ul.theList {
     padding: 0;
   }
