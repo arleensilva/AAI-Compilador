@@ -1,7 +1,9 @@
 export default (code) => {
     let lines = code.split('\n');
-    let message='';
+    let status='';
     let state=0;
+    let messageList=[];
+    let lineNumber = 1;
 
     function isLetter(str){
         let regex = /^[A-Za-z]+$/
@@ -22,24 +24,51 @@ export default (code) => {
         return str == '+' || str == '-' || str == '*' || str == '='
     }
 
+
     lines.forEach(line => {
-        
-        // if(isSpace(line.charAt(0))) state = 0
-        // else if(line.charAt(0) == '/') state = 1
-        // else if(isLetter(line.charAt(0))) state = 5
-        // else state = -1
+
+        state = 0
+        //let regex = /(?:^|\W)int(?:$|\W)/
+
+        if (/(?:^|\W)for(?:$|\W)/.test(line)){
+            messageList.push(`Erro na linha ${lineNumber}. for é uma palavra reservada`)
+            state = -1
+        }
+        if (/(?:^|\W)while(?:$|\W)/.test(line)){
+            messageList.push(`Erro na linha ${lineNumber}. while é uma palavra reservada`)
+            state = -1
+        }
+        if (/(?:^|\W)if(?:$|\W)/.test(line)){
+            messageList.push(`Erro na linha ${lineNumber}. if é uma palavra reservada`)
+            state = -1
+        }
+        if (/(?:^|\W)int(?:$|\W)/.test(line)){
+            messageList.push(`Erro na linha ${lineNumber}. int é uma palavra reservada`)
+            state = -1
+        }
+        if (/(?:^|\W)float(?:$|\W)/.test(line)){
+            messageList.push(`Erro na linha ${lineNumber}. float é uma palavra reservada`)
+            state = -1
+        }
+        if (/(?:^|\W)string(?:$|\W)/.test(line)){
+            messageList.push(`Erro na linha ${lineNumber}. string é uma palavra reservada`)
+            state = -1
+        }
 
         for(let i=0; i<line.length; i++){
             let x = line.charAt(i);
+
+            
 
 
             switch(state){
                 case 0:
                     if(isSpace(x)) state = 0
+                    else if(x == ';') state = 0
                     else if(x == '/') state = 1
                     else if(isLetter(x)) state = 5
                     else state = -1
-                    message = 'Compilação OK'
+                    status = 'Compilação OK'
                 break;
 
                 case 1:
@@ -51,7 +80,7 @@ export default (code) => {
                 case 2:
                     //i = line.length
                     state = 2
-                    message = 'Compilação Ok Linha'
+                    //status = 'Compilação Ok Linha'
                 break;
 
                 case 3:
@@ -71,6 +100,7 @@ export default (code) => {
                     else if (x == '/') state = 6
                     else if (isSpace(x)) state = 9
                     else if (isOp(x)) state = 10
+                    else if (x == ';') state = 0
                     else state = -1
                 break;
 
@@ -211,21 +241,20 @@ export default (code) => {
                     if(x == '*') state = 25 //N Precisa
                     if(x == '/') state = 17
                 break;
-
-                case -1:
-                    message = 'Erro Compilação'
-                break;
             }
 
             if(state == -1 || state == 2) break
         }
 
-        if(state != 0 && state != 2) message = 'Erro Compilação Final'
+        if(state != 0 && state != 2) status = 'Erro Compilação Final'
+        lineNumber++
+        //messageList.push(status)
     })
 
-    return message
+    return status
+    //return messageList.toString().replace(',','\n')
 }
 
 
-//message += `posição ${i} e char ${line.charAt(i)} é letra ${isLetter(line.charAt(i))} e é número ${isNumber(line.charAt(i))}     | | | `
+//status += `posição ${i} e char ${line.charAt(i)} é letra ${isLetter(line.charAt(i))} e é número ${isNumber(line.charAt(i))}     | | | `
 //console.log(isSpace(line.charAt))

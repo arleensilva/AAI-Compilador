@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import CodeParser from './CodeParser'
+import TextareaAutosize from 'react-autosize-textarea';
 
 class Code extends Component {
 
     constructor(props){
         super(props);
 
-        this.state = { code: '', message: 'testezinho' }
+        this.state = { code: '', message: 'Escreva o código na caixa de texto para verificar a compilação.' }
 
         this.handleChange = this.handleChange.bind(this);
     }
@@ -14,7 +15,7 @@ class Code extends Component {
 
     handleChange(e){
         let a = CodeParser(e.target.value)
-        if(a ==  '') a = 'Spending My Time'
+        if(a ==  '') a = 'Escreva o código na caixa de texto para verificar a compilação.'
         this.setState({ ...this.state, code: e.target.value, message: a })
     }
 
@@ -25,8 +26,8 @@ class Code extends Component {
                 <div className="header">
                 <h1 class="text-center text-primary">AAI - Compilador</h1>
                 <form onSubmit>
-                    <textarea rows="10" cols="40" onChange={(e) => this.handleChange(e)}>
-                    </textarea>
+                    <TextareaAutosize rows="3" cols="40" onChange={(e) => this.handleChange(e)}>
+                    </TextareaAutosize>
                 </form>
                 {this.state.message}
                 </div>
