@@ -2,8 +2,9 @@ export default (code) => {
     let lines = code.split('\n');
     let status='';
     let state=0;
-    let messageList=[];
+    let error=[];
     let lineNumber = 1;
+    let errorLine = '';
 
     function isLetter(str){
         let regex = /^[A-Za-z]+$/
@@ -28,31 +29,32 @@ export default (code) => {
     lines.forEach(line => {
 
         state = 0
+        errorLine = ''
         //let regex = /(?:^|\W)int(?:$|\W)/
 
         if (/(?:^|\W)for(?:$|\W)/.test(line)){
-            messageList.push(`Erro na linha ${lineNumber}. for é uma palavra reservada`)
-            state = -1
+            error.push(`Erro na linha ${lineNumber}: for é uma palavra reservada.`)
+            state = -2
         }
         if (/(?:^|\W)while(?:$|\W)/.test(line)){
-            messageList.push(`Erro na linha ${lineNumber}. while é uma palavra reservada`)
-            state = -1
+            error.push(`Erro na linha ${lineNumber}: while é uma palavra reservada.`)
+            state = -2
         }
         if (/(?:^|\W)if(?:$|\W)/.test(line)){
-            messageList.push(`Erro na linha ${lineNumber}. if é uma palavra reservada`)
-            state = -1
+            error.push(`Erro na linha ${lineNumber}: if é uma palavra reservada.`)
+            state = -2
         }
         if (/(?:^|\W)int(?:$|\W)/.test(line)){
-            messageList.push(`Erro na linha ${lineNumber}. int é uma palavra reservada`)
-            state = -1
+            error.push(`Erro na linha ${lineNumber}: int é uma palavra reservada.`)
+            state = -2
         }
         if (/(?:^|\W)float(?:$|\W)/.test(line)){
-            messageList.push(`Erro na linha ${lineNumber}. float é uma palavra reservada`)
-            state = -1
+            error.push(`Erro na linha ${lineNumber}: float é uma palavra reservada.`)
+            state = -2
         }
         if (/(?:^|\W)string(?:$|\W)/.test(line)){
-            messageList.push(`Erro na linha ${lineNumber}. string é uma palavra reservada`)
-            state = -1
+            error.push(`Erro na linha ${lineNumber}: string é uma palavra reservada.`)
+            state = -2
         }
 
         for(let i=0; i<line.length; i++){
@@ -243,16 +245,19 @@ export default (code) => {
                 break;
             }
 
-            if(state == -1 || state == 2) break
+            if(state != 0 && state != 2 && state != -2) errorLine = `Erro na linha ${lineNumber}. Identificador inesperado: ${line.substring(0, i+1)}... `
+            else errorLine = ''
+            if(state == -1 || state == 2 || state == -2) break
         }
 
-        if(state != 0 && state != 2) status = 'Erro Compilação Final'
+        if(state != 0 && state != 2 || error.length > 0) status = 'Erro Compilação Final'
         lineNumber++
-        //messageList.push(status)
+        if(errorLine != '') error.push(errorLine)
+        //error.push(status)
     })
 
-    return status
-    //return messageList.toString().replace(',','\n')
+    return {status: status, error: error}
+    //return error.toString().replace(',','\n')
 }
 
 
