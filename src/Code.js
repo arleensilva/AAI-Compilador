@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import CodeParser from './CodeParser'
 import TextareaAutosize from 'react-autosize-textarea';
+import fumec from './fumec.jpg'
 
 class Code extends Component {
 
@@ -24,13 +25,20 @@ class Code extends Component {
         return (
             <div className="codeMain">
                 <div className="header">
-                <h1 className="text-center text-primary">AAI - Compilador</h1>
-                <form>
-                    <TextareaAutosize  onChange={(e) => this.handleChange(e)}>
-                    </TextareaAutosize>
-                </form>
+                    <img src={fumec}   />
+                    <h1 className="text-center text-primary">Disciplina - Compiladores</h1>
                 </div>
                 <div>
+                    <p className="text-center text-primary">Trabalho AutoInstrucional<br /> 
+                    Construção da parte frontend de um compilador simples.<br />
+                    Alunos: Arleen, Gabriel, Fernando, Dayana<br />
+                    Professor: Jõao Aramuni</p>
+                    <form className="theForm">
+                        <TextareaAutosize  onChange={(e) => this.handleChange(e)}>
+                        </TextareaAutosize>
+                    </form>
+                </div>
+                <div className="result">
                     {this.state.message}
                 </div>
                 <div>

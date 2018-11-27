@@ -129,6 +129,7 @@ export default (code) => {
                     if(isSpace(x)) state = 9
                     else if(x == '/') state = 6
                     else if(isOp(x)) state = 10
+                    else if(x == ';') state = 0
                     else state = -1
                 break;
 
