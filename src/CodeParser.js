@@ -111,6 +111,8 @@ export default (code) => {
                     else if(isSpace(x)) state = 10 //Verificar os == != 
                     else if(isLetter(x)) state = 14
                     else if(isNumber(x)) state = 15
+                    else if(x == '"') state = 26
+                    else if(x == "'") state = 27
                     else state = -1
                 break;
 
@@ -138,6 +140,8 @@ export default (code) => {
                     else if(x == '/') state = 11
                     else if(isLetter(x)) state = 14
                     else if(isNumber(x)) state = 15
+                    else if(x == '"') state = 26
+                    else if(x = "'") state = 27
                     else state = -1
                 break;
 
@@ -199,6 +203,8 @@ export default (code) => {
                     else if(isNumber(x)) state = 15
                     else if(isSpace(x)) state = 19
                     else if (x == '/') state = 20
+                    else if(x == '"') state = 26
+                    else if(x == "'") state = 27
                     else state = -1
                 break;
 
@@ -207,6 +213,8 @@ export default (code) => {
                     else if(isNumber(x)) state = 15
                     else if(isSpace(x)) state = 19
                     else if (x == '/') state = 20
+                    else if (x == '"') state = 26
+                    else if(x == "'") state = 27
                     else state = -1
                 break;
 
@@ -243,6 +251,16 @@ export default (code) => {
                     if(x != '/' && x != '*') state = 24
                     if(x == '*') state = 25 //N Precisa
                     if(x == '/') state = 17
+                break;
+
+                case 26:
+                    if(x != '"') state = 27 // N precisa
+                    if(x == '"') state = 17
+                break;
+
+                case 27:
+                    if(x != "'") state = 27 // N precisa
+                    if(x == "'") state = 17
                 break;
             }
 
