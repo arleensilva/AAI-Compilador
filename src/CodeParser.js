@@ -22,7 +22,11 @@ export default (code) => {
     }
 
     function isOp(str){
-        return str == '+' || str == '-' || str == '*' || str == '='
+        return str == '+' || str == '-' || str == '*' 
+    }
+
+    function isRel(str){
+        return str == '!' || str == '<' || str == '>'
     }
 
 
@@ -69,6 +73,9 @@ export default (code) => {
                     else if(x == ';') state = 0
                     else if(x == '/') state = 1
                     else if(isLetter(x)) state = 5
+                    else if(isNumber(x)) state = 15
+                    else if(x == '"') state = 26
+                    else if(x == "'") state = 27
                     else state = -1
                     status = 'Compilação OK'
                 break;
@@ -102,6 +109,8 @@ export default (code) => {
                     else if (x == '/') state = 6
                     else if (isSpace(x)) state = 9
                     else if (isOp(x)) state = 10
+                    else if (isRel(x)) state = 18
+                    else if (x == '=') state = 28
                     else if (x == ';') state = 0
                     else state = -1
                 break;
@@ -131,6 +140,8 @@ export default (code) => {
                     if(isSpace(x)) state = 9
                     else if(x == '/') state = 6
                     else if(isOp(x)) state = 10
+                    else if(isRel(x)) state = 18
+                    else if(x == '=') state = 28
                     else if(x == ';') state = 0
                     else state = -1
                 break;
@@ -165,7 +176,9 @@ export default (code) => {
                     if(isLetter(x)) state = 14
                     else if(isNumber(x)) state = 14
                     else if(isSpace(x)) state = 17
-                    else if(isOp(x)) state = 18
+                    else if(isOp(x)) state = 10
+                    else if(isRel(x)) state = 18
+                    else if(x == '=') state = 18
                     else if(x == '/') state = 23
                     else if(x == ';') state = 0
                     else state = -1
@@ -175,7 +188,9 @@ export default (code) => {
                     if(isNumber(x)) state = 15
                     else if(x == '.') state = 16
                     else if(isSpace(x)) state = 17
-                    else if(isOp(x)) state = 18
+                    else if(isOp(x)) state = 10
+                    else if(isRel(x)) state = 18
+                    else if(x == '=') state = 18
                     else if(x == '/') state = 23
                     else if(x == ';') state = 0
                     else state = -1
@@ -184,7 +199,9 @@ export default (code) => {
                 case 16:
                     if(isNumber(x)) state = 16
                     else if(isSpace(x)) state = 17
-                    else if(isOp(x)) state = 18
+                    else if(isOp(x)) state = 10
+                    else if(isRel(x)) state = 18
+                    else if(x == '=') state = 18
                     else if(x == '/') state = 23
                     else if(x == ';') state  = 0
                     else state = -1
@@ -192,19 +209,16 @@ export default (code) => {
 
                 case 17:
                     if(isSpace(x)) state = 17
-                    else if(isOp(x)) state = 18
+                    else if(isOp(x)) state = 10
+                    else if(isRel(x)) state = 18
+                    else if(x == '=') state = 18
                     else if(x == '/') state = 23
                     else if(x == ';') state = 0
                     else state = -1
                 break;
 
                 case 18:
-                    if(isLetter(x)) state = 14
-                    else if(isNumber(x)) state = 15
-                    else if(isSpace(x)) state = 19
-                    else if (x == '/') state = 20
-                    else if(x == '"') state = 26
-                    else if(x == "'") state = 27
+                    if(x == '=') state = 10
                     else state = -1
                 break;
 
@@ -254,13 +268,23 @@ export default (code) => {
                 break;
 
                 case 26:
-                    if(x != '"') state = 27 // N precisa
+                    if(x != '"') state = 26 // N precisa
                     if(x == '"') state = 17
                 break;
 
                 case 27:
                     if(x != "'") state = 27 // N precisa
                     if(x == "'") state = 17
+                break;
+
+                case 28:
+                    if(isSpace(x) || x == '=') state = 10
+                    else if(x == '/') state = 11
+                    else if(isLetter(x)) state = 14
+                    else if(isNumber(x)) state = 15
+                    else if(x == '"') state = 26
+                    else if(x = "'") state = 27
+                    else state = -1
                 break;
             }
 
