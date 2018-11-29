@@ -29,6 +29,38 @@ export default (code) => {
         return str == '!' || str == '<' || str == '>'
     }
 
+    function isReserved(line){
+
+        let errorReserved = false; 
+
+        if (/(?:^|\W)for(?:$|\W)/.test(line)){
+            error.push(`Erro na linha ${lineNumber}: for é uma palavra reservada.`)
+             errorReserved = true
+        }
+        if (/(?:^|\W)while(?:$|\W)/.test(line)){
+            error.push(`Erro na linha ${lineNumber}: while é uma palavra reservada.`)
+            errorReserved = true
+        }
+        if (/(?:^|\W)if(?:$|\W)/.test(line)){
+            error.push(`Erro na linha ${lineNumber}: if é uma palavra reservada.`)
+            errorReserved = true
+        }
+        if (/(?:^|\W)int(?:$|\W)/.test(line)){
+            error.push(`Erro na linha ${lineNumber}: int é uma palavra reservada.`)
+            errorReserved = true
+        }
+        if (/(?:^|\W)float(?:$|\W)/.test(line)){
+            error.push(`Erro na linha ${lineNumber}: float é uma palavra reservada.`)
+            errorReserved = true
+        }
+        if (/(?:^|\W)string(?:$|\W)/.test(line)){
+            error.push(`Erro na linha ${lineNumber}: string é uma palavra reservada.`)
+            errorReserved = true
+        }
+
+        return errorReserved
+    }
+
 
     lines.forEach(line => {
 
@@ -36,30 +68,13 @@ export default (code) => {
         errorLine = ''
         //let regex = /(?:^|\W)int(?:$|\W)/
 
-        if (/(?:^|\W)for(?:$|\W)/.test(line)){
-            error.push(`Erro na linha ${lineNumber}: for é uma palavra reservada.`)
-            state = -2
+        let piece = line.split('//')
+        let pieceBlock = piece[0].split('/*')
+        for (let j = 0; j < pieceBlock.length; j+=2){
+            let pieceLeftBlock = pieceBlock[j].split('*/')
+            if(isReserved(pieceLeftBlock[0])) state = -2
         }
-        if (/(?:^|\W)while(?:$|\W)/.test(line)){
-            error.push(`Erro na linha ${lineNumber}: while é uma palavra reservada.`)
-            state = -2
-        }
-        if (/(?:^|\W)if(?:$|\W)/.test(line)){
-            error.push(`Erro na linha ${lineNumber}: if é uma palavra reservada.`)
-            state = -2
-        }
-        if (/(?:^|\W)int(?:$|\W)/.test(line)){
-            error.push(`Erro na linha ${lineNumber}: int é uma palavra reservada.`)
-            state = -2
-        }
-        if (/(?:^|\W)float(?:$|\W)/.test(line)){
-            error.push(`Erro na linha ${lineNumber}: float é uma palavra reservada.`)
-            state = -2
-        }
-        if (/(?:^|\W)string(?:$|\W)/.test(line)){
-            error.push(`Erro na linha ${lineNumber}: string é uma palavra reservada.`)
-            state = -2
-        }
+
 
         for(let i=0; i<line.length; i++){
             let x = line.charAt(i);
