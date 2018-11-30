@@ -71,7 +71,7 @@ export default (code) => {
         // regex for quotation /'.+?'/g    /".+?"/g  
 
 
-        line = line.replace(/\/\/.*/g, ' ').replace(/\/\*.+?\*\//g, ' ').replace(/'.+?'/g, "''").replace(/".+?"/g, '""')
+        line = line.replace(/\/\*.+?\*\//g, ' ').replace(/\/\/.*/g, ' ').replace(/'.+?'/g, "''").replace(/".+?"/g, '""')
         if(isReserved(line)) status = -2
 
         for(let i=0; i<line.length; i++){
