@@ -66,15 +66,13 @@ export default (code) => {
 
         state = 0
         errorLine = ''
-        //let regex = /(?:^|\W)int(?:$|\W)/
 
-        let piece = line.split('//')
-        let pieceBlock = piece[0].split('/*')
-        for (let j = 0; j < pieceBlock.length; j+=2){
-            let pieceLeftBlock = pieceBlock[j].split('*/')
-            if(isReserved(pieceLeftBlock[0])) state = -2
-        }
+        // regex for comments line /\/\/.*/g and block /\/\*.+?\*\//g
+        // regex for quotation /'.+?'/g    /".+?"/g  
 
+
+        line = line.replace(/\/\/.*/g, ' ').replace(/\/\*.+?\*\//g, ' ').replace(/'.+?'/g, "''").replace(/".+?"/g, '""')
+        if(isReserved(line)) status = -2
 
         for(let i=0; i<line.length; i++){
             let x = line.charAt(i);
@@ -102,9 +100,7 @@ export default (code) => {
                 break;
 
                 case 2:
-                    //i = line.length
                     state = 2
-                    //status = 'Compilação Ok Linha'
                 break;
 
                 case 3:
@@ -132,7 +128,7 @@ export default (code) => {
 
                 case 6:
                     if(x == '*') state = 7
-                    else if(isSpace(x)) state = 10 //Verificar os == != 
+                    else if(isSpace(x)) state = 10
                     else if(isLetter(x)) state = 14
                     else if(isNumber(x)) state = 15
                     else if(x == '"') state = 26
@@ -173,7 +169,7 @@ export default (code) => {
 
                 case 11:
                     if(x == '*') state = 12
-                    else state = -1 //Dois operandos
+                    else state = -1
                 break;
 
                 case 12:
@@ -311,13 +307,7 @@ export default (code) => {
         if(state != 0 && state != 2 || error.length > 0) status = 'Erro Compilação Final'
         lineNumber++
         if(errorLine != '') error.push(errorLine)
-        //error.push(status)
     })
 
     return {status: status, error: error}
-    //return error.toString().replace(',','\n')
 }
-
-
-//status += `posição ${i} e char ${line.charAt(i)} é letra ${isLetter(line.charAt(i))} e é número ${isNumber(line.charAt(i))}     | | | `
-//console.log(isSpace(line.charAt))
